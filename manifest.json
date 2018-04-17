@@ -21,6 +21,17 @@
             "38": "images/icon_38.png"
         },
 
-        "default_popup": "html/main.html"
+        "default_popup": "index.html"
+    },
+    
+    "content_scripts": [
+        {
+            "matches": ["https://*/*", "http://*/*"],
+            "js": ["js/jquery-1.9.1.js", "js/trigger.js"]
+        }
+     ],
+
+    "background":{
+       "scripts": ["js/background.js"]
     }
 }
