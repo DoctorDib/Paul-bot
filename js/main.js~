@@ -23,9 +23,4 @@ jQuery('#start').click(function(){
 jQuery('#stop').click(function(){
 	jQuery(this).addClass('active');
 	jQuery('#start').removeClass('active');
-	
-	var url = jQuery('#url').val();
-	if(url && verifyURL(url)){
-		main(url+"?bot=false");
-	}
 });
