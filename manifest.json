@@ -1,19 +1,19 @@
 {
-    //manifest spec: http://developer.chrome.com/extensions/manifest.html
-    //required
     "name": "Paul: BOT",
     "version": "1.0",
     "manifest_version": 2,
 
-    //recommended
     "description": "Paul extention bot",
     "icons": {
         "19": "app/images/icon_19.png",
         "38": "app/images/icon_38.png",
         "128": "app/images/icon_128.png"
     },
+    
+    "background": {
+         "scripts": ["app/js/background.js"]
+     },
 
-    //required
     "browser_action": {
         "default_title": "browser_action: default_title",
         "default_icon": {
@@ -21,19 +21,13 @@
             "38": "app/images/icon_38.png"
         },
 
-        "default_popup": "index.html"
+        "default_popup": "app/index.html"
     },
-    
-    "web_accessible_resources": ["app/js/Background.js"],
     
     "content_scripts": [
         {
             "matches": ["https://*/*", "http://*/*"],
-            "js": ["lib/jquery-1.9.1.js", "lib/require.js", "lib/require-cs.js", "app/js/trigger.js"]
+            "js": ["lib/jquery-1.9.1.js", "app/js/trigger.js", "app/js/main.js"]
         }
-     ],
-     
-     "background": {
-         "scripts": ["app/js/Background.js"]
-     }
+     ]
 }
