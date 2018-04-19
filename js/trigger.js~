@@ -7,17 +7,15 @@ if(window.location.href.indexOf('bot=true') > -1){
 
 
 var tabs = 0;
-chrome.tabs.query({windowType:'normal'}, function(tabs) {
+/*chrome.tabs.query({windowType:'normal'}, function(tabs) {
     console.log('Number of open tabs in all normal browser windows:',tabs.length);
     tabs = tabs.length;
-}); 
+}); */
 
 
 if(document.cookie.indexOf('bot=true') > -1 && tabs < 10){
 
-    
-
-    var list = [];
+        var list = [];
 
     var domain = window.location.origin;
     var doc = document.getElementsByTagName('html')[0].innerHTML;
