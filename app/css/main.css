@@ -1,0 +1,13 @@
+body {
+	background-color: ;
+}
+
+button {
+	background-color: black;
+	color: white;
+}
+
+.active {
+	background-color: white;
+	color: black;
+}

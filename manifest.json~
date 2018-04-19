@@ -8,26 +8,32 @@
     //recommended
     "description": "Paul extention bot",
     "icons": {
-        "19": "images/icon_19.png",
-        "38": "images/icon_38.png",
-        "128": "images/icon_128.png"
+        "19": "app/images/icon_19.png",
+        "38": "app/images/icon_38.png",
+        "128": "app/images/icon_128.png"
     },
 
     //required
     "browser_action": {
         "default_title": "browser_action: default_title",
         "default_icon": {
-            "19": "images/icon_19.png",
-            "38": "images/icon_38.png"
+            "19": "app/images/icon_19.png",
+            "38": "app/images/icon_38.png"
         },
 
         "default_popup": "index.html"
     },
     
+    "web_accessible_resources": ["app/js/Background.js"],
+    
     "content_scripts": [
         {
             "matches": ["https://*/*", "http://*/*"],
-            "js": ["js/jquery-1.9.1.js", "js/trigger.js"]
+            "js": ["lib/jquery-1.9.1.js", "lib/require.js", "lib/require-cs.js", "app/js/trigger.js"]
         }
-     ]
+     ],
+     
+     "background": {
+         "scripts": ["app/js/Background.js"]
+     }
 }

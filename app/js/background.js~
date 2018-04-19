@@ -1,0 +1,10 @@
+define(function () {
+  var App = {
+    run: function () {
+      console.log("HELLO")
+        
+    }
+  };
+
+  return App;
+});
