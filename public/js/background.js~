@@ -38,6 +38,7 @@ chrome.runtime.onMessage.addListener(
 					sendResponse({msg: collectedURLS});
 				});
 				break;
+			
 			case 'saveMapping':
 				checkSave(request.val, function(){
 					sendResponse({msg: mapping});

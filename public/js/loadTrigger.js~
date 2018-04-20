@@ -71,12 +71,10 @@ chrome.runtime.sendMessage({command: 'check'}, function(response) {
 			}
 		});
 		
-		// Saving array of urls.
 		chrome.runtime.sendMessage({command: 'saveList', val: list}, function(data){
 			console.log(data)
 		});
 
-        // Saving the mapping of the site
 		chrome.runtime.sendMessage({command: 'saveMapping', val: overall}, function(data){
 			console.log(data)
 		});
