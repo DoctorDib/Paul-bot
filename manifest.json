@@ -5,29 +5,34 @@
 
     "description": "Paul extention bot",
     "icons": {
-        "19": "app/images/icon_19.png",
-        "38": "app/images/icon_38.png",
-        "128": "app/images/icon_128.png"
+        "19": "public/images/icon_19.png",
+        "38": "public/images/icon_38.png",
+        "128": "public/images/icon_128.png"
     },
+	
+	"permissions": [
+		"tabs"
+	],
     
     "background": {
-         "scripts": ["app/js/background.js"]
+         "scripts": ["public/js/background.js"],
+		 "persistent": false
      },
 
     "browser_action": {
         "default_title": "browser_action: default_title",
         "default_icon": {
-            "19": "app/images/icon_19.png",
-            "38": "app/images/icon_38.png"
+            "19": "public/images/icon_19.png",
+            "38": "public/images/icon_38.png"
         },
 
-        "default_popup": "app/index.html"
+        "default_popup": "public/index.html"
     },
     
     "content_scripts": [
         {
-            "matches": ["https://*/*", "http://*/*"],
-            "js": ["lib/jquery-1.9.1.js", "app/js/trigger.js", "app/js/main.js"]
+            "matches": ["<all_urls>"],
+            "js": ["lib/jquery-1.9.1.js", "public/js/loadTrigger.js", "public/js/main.js"]
         }
      ]
 }
