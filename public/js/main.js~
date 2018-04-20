@@ -72,7 +72,5 @@ jQuery('#createMap').click(function(){
 	// Sending message to background
     chrome.runtime.sendMessage({command: 'collectMap'}, function(data){
         var message = data.msg;
-        
-        
     });
 }); 

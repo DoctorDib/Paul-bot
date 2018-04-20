@@ -29,10 +29,6 @@
 		    <button id="createMap" style="width: 100%"> Create Mapping </button>
 		</section>
 		
-		<section id="map">
-		
-	    </section>
-		
 		<script type="text/javascript" src="js/main.js"></script>
 		
     </body>

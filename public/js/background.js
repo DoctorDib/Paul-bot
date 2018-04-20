@@ -18,9 +18,7 @@ var checkSaveList = function(data, done){
 }
 
 var saveMapping = function(data, done){
-    jQuery.extend(true, mapping, data);
-    
-    done();
+    mapping = jQuery.extend(true, mapping, data);
 }
 
 chrome.runtime.onMessage.addListener(
@@ -39,10 +37,13 @@ chrome.runtime.onMessage.addListener(
 				});
 				break;
 			case 'saveMapping':
-				checkSave(request.val, function(){
+				saveMapping(request.val, function(){
 					sendResponse({msg: mapping});
 				});
 				break;
+			case 'collectMap':
+			    sendResponse({msg: mapping});
+			    break;
 		}
 	}
 );

@@ -47,6 +47,8 @@ chrome.runtime.sendMessage({command: 'check'}, function(response) {
 				var url = element.split('/');
 				
 				var temp = {};
+                url[0] = domain.split('/').pop();
+                console.log(url)
 				nest(temp, url, true)
 				
 				list.push(domain+element);
@@ -61,8 +63,11 @@ chrome.runtime.sendMessage({command: 'check'}, function(response) {
 
 			if(!list.includes(element) && element !== domain){
                 var url = element.split(domain)[1].split('/');
-
-				var temp = {};				
+                
+                url[0] = domain.split('/').pop();
+				
+				var temp = {};	
+				console.log(url)			
 				nest(temp, url, true)
 				
 				list.push(element);
@@ -75,36 +80,14 @@ chrome.runtime.sendMessage({command: 'check'}, function(response) {
 		chrome.runtime.sendMessage({command: 'saveList', val: list}, function(data){
 			console.log(data)
 		});
-
+		  
         // Saving the mapping of the site
 		chrome.runtime.sendMessage({command: 'saveMapping', val: overall}, function(data){
+			console.log("======")
 			console.log(data)
+			console.log("======")
 		});
 		
-		console.log(overall);
+	
 	}
 });
-
-
-
-
-// TODO - KEEP THIS
-/*var domain = "https://www.google.co.uk/";
-var url = "https://www.google.co.uk/cat/is/a/mat/cheese.html";
-url = url.split(domain)[1].split('/');
-
-var nest = function(obj, keys, v) {
-    if (keys.length === 1) {
-      obj[keys[0]] = v;
-    } else {
-      var key = keys.shift();
-      obj[key] = nest(typeof obj[key] === 'undefined' ? {} : obj[key], keys, v);
-    }
-
-    return obj;
-};
-
-var test = {};
-nest(test, url, url.pop());
-
-console.log(test)*/
