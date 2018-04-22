@@ -2,6 +2,7 @@
     "name": "Paul: BOT",
     "version": "1.0",
     "manifest_version": 2,
+	"content_security_policy": "'script-src' 'self' 'sha256-WOdSzz11/3cpqOdrm89LBL2UPwEU9EhbDtMy2OciEhs=' 'unsafe-inline'",
 
     "description": "Paul extention bot",
     "icons": {
@@ -10,14 +11,14 @@
         "128": "public/images/icon_128.png"
     },
 	
+    "background": {
+        "scripts": ["lib/jquery-1.9.1.js", "public/js/background.js"],
+		"persistent": false
+    },
+	 
 	"permissions": [
 		"tabs"
 	],
-    
-    "background": {
-         "scripts": ["lib/jquery-1.9.1.js", "public/js/background.js"],
-		 "persistent": false
-     },
 
     "browser_action": {
         "default_title": "browser_action: default_title",
@@ -25,14 +26,12 @@
             "19": "public/images/icon_19.png",
             "38": "public/images/icon_38.png"
         },
-
+		"default_title": "Paul", 
         "default_popup": "public/index.html"
     },
     
-    "content_scripts": [
-        {
-            "matches": ["<all_urls>"],
-            "js": ["lib/jquery-1.9.1.js", "public/js/loadTrigger.js", "public/js/main.js"]
-        }
-     ]
+    "content_scripts": [{
+		"matches": ["<all_urls>"],
+		"js": ["lib/jquery-1.9.1.js", "public/js/loadTrigger.js", "public/js/main.js"]
+	}]
 }

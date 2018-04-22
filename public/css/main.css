@@ -1,9 +1,6 @@
-
-
 body {
 	width: 300px;
 }
-
 
 h1 {
 	text-align: center;
@@ -33,24 +30,22 @@ section {
 section#buttons {
 	flex-flow: row;
 }
-section#inputs{
+section#inputs {
 	flex-flow: column;
 }
 
 button {
 	background-color: #cccccc;
 	color: white;
-	box-shadow: 0px 0px 3px 0px black inset;
-	
+	box-shadow: 0px 0px 3px 0px black inset;	
 	border: 1px solid #999999;
-	
 	font-size: 1.5em;
 	width: 48%;
 	margin-left: auto;
 	margin-right: auto;
 }
 
-button:hover{
+button:hover {
 	background-color: grey;
 	color: white;
 }
@@ -59,4 +54,31 @@ button:hover{
 	color: #b3b2b2;
 	box-shadow: 0px 0px 13px 0px black inset;
 	background-color: grey;
+}
+
+div {
+	padding-right: 2em;
+	position: relative;
+	border-top: 1px black solid;
+	border-bottom: 1px black solid;
+	border-right: 1px black solid;
+}
+
+div::before {
+    content: "";
+	display: block;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color:red;
+	opacity: 0.1;
+	left: 0;
+}
+
+.max {
+	width: 50em;
+	height: 50em;
+}
+.max-div {
+	font-size: 1.5em;
 }
