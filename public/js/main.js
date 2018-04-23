@@ -1,19 +1,5 @@
 var visitedUrls = [];
-var intial = false;
-
-var validateURL = function(url, done){
-	jQuery.ajax({
-    	url: url,
-    	data: {},
-    	complete: function(data){
-			if(data.status === 404 || data.status === 0){
-				done(false)
-			} else {
-				done(true)
-			}
-		}
-	});
-}
+var initial = false;
 
 var slugify = function(text){
 //	console.log(text)
@@ -23,7 +9,37 @@ var slugify = function(text){
 		.replace(/\-\-+/g, '-')
 		.replace(/^-+/, '')
 		.replace(/-+$/, '');
-}
+};
+
+var append = function(key, url, parent){
+
+	console.log("1: " + key);
+	console.log("2: " + url);
+	console.log("3: " + parent);
+
+	if(!initial){
+		initial = true;
+		jQuery('#map').append('<div id="' + slugify(key) + '" onclick="' + url+"/"+key + '"> <h2 class="field">' + key + '</h2> </div>')
+	} else {
+		if(key){
+			jQuery('#'+slugify(parent)).append('<div id="' + slugify(key) + '" class="fields" onclick="' + url+"/"+key + '"> <h2 class="field">' + key + '</h2> </div>')
+		}
+	}
+};
+
+var list = [];
+
+var validateURL = function(url, obj, done){
+    var xhttp;
+    xhttp=new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            done(obj, this);
+        }
+    };
+    xhttp.open("GET", url, true);
+    xhttp.send();
+};
 
 var concatenate_path = function(path, key) {
 	if(path === ''){
@@ -31,47 +47,61 @@ var concatenate_path = function(path, key) {
 	} else {
 		return path + ".." + key;
 	}
-}
+};
 
-var append = function(key, url, parent){
-	if(!intial){
-		intial = true;
-		jQuery('#map').append('<div id="' + slugify(key) + '" onclick="' + url+"/"+key + '"> <h2 class="field">' + key + '</h2> </div>')
-	} else {
-		if(key){
-			jQuery('#'+slugify(parent)).append('<div id="' + slugify(key) + '" class="fields" onclick="' + url+"/"+key + '"> <h2 class="field">' + key + '</h2> </div>')
-		}
-	}
-}
-
-var tempParent = '';
 
 var validateObject = function (object, path) {
+	console.log("//",object);
+	
     if(!path) {
-        path = ''; // TODO - Domain will go here
-    }
-	console.log(object)
-    for(var key in object) {
-        if(object.hasOwnProperty(key)) {
+		console.log("not found");
+        for (var item in object) {
+			if(object.hasOwnProperty(item)){
+				path = item;
 
-			var url = "https://" + path.replace(/\.\./gi, '/');
-			console.log(url)
-			console.log(path)
-			validateURL(url, function(data){
-				console.log("passed?: " + url + "     -    " + data);
-				if(data){
-					tempParent = path.split('..').pop();
-					append(key, url , tempParent);
-				} else {
-					console.log(url)
-					console.log("FAILED: Page not found")
-					tempParent = concatenate_path(path, key)
-				}
+				append(item,  'https://'+path+'/', path);
+				validateObject(object[path], path);
+				break;
+			}
+		}
+    } else {
+		for(var key in object) {
+			if(object.hasOwnProperty(key) ) {
+				var url = 'https://'+path.replace(/\.\./gi, '/')+'/' + key;
+				console.log(url);
+				
+				console.log(key);
+				console.log(url);
+				
+				var data = {key:key, url:url, path: path, objectChild:object[key]};
+				
+				validateURL(url, data, function(data, response){
+					console.log(response)
+                    if(response.status === 200){
 
-				if(typeof(object[key]) === 'object'){
-					validateObject(object[key], concatenate_path(path, key));
-				}
-			});
+                        console.log("Hello");
+                        if(list.length > 1){
+                            list.push(data.key);
+                            append(list.join('/'), data.url, data.path);
+                            list = [];
+                        } else {
+                            append(data.key, data.url, data.path);
+                        }
+
+                    } else {
+                        console.log("FAILED")
+                        list.push(data.key);
+                        console.log(list)
+
+                    }
+
+                    if(typeof(data.objectChild[data.key])==='object'){
+                        validateObject(data.objectChild[data.key], concatenate_path(data.path, data.key));
+                    }
+				});
+				
+				
+			}
 		}
 	}
 };
@@ -83,15 +113,15 @@ var checkNumberOfTabs = function(){
 	});
 
 	return tabsCount;
-}
+};
 
 var main = function(urlLink){
 	chrome.tabs.create({ url: urlLink});
-}
+};
 
 var verifyURL = function(url){
-	return true // TODO - create verification
-}
+	return true; // TODO - create verification
+};
 
 //===========================================================
 
