@@ -1,17 +1,16 @@
-var active = true; // Always deactivate on intial load.
+var active = false; // Always deactivate on initial load.
 
 var domain = false;
 var collectedURLS = [];
 var mapping = {};
+var visitedURLS = [];
 
 /*var checkSetDomain = function(){
 	
 };*/
 
 var checkSaveList = function(data, done){
-	console.log("Hello")
 	jQuery(data).each(function(index, element){
-		console.log(element)
 		if(!collectedURLS.includes(element)){
 			collectedURLS.push(element);
 		}
@@ -20,7 +19,7 @@ var checkSaveList = function(data, done){
 	setTimeout(function(){
 		done();
 	}, 1000);
-}
+};
 
 var saveMapping = function(data, done){
 	if(domain !== data.domain){
@@ -30,12 +29,12 @@ var saveMapping = function(data, done){
 
     mapping = jQuery.extend(true, mapping, data.data);
 	done()
-}
+};
 
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 	switch(request.command){
 		case 'check':
-			sendResponse({msg: active});
+			sendResponse({msg: active, collected: collectedURLS});
 			break; 
 		case 'set':
 			console.log("Setting Active Status: " + request.val);
@@ -59,3 +58,17 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
 			break;
 	}
 });
+
+
+/*while(true){
+    if(active){
+        jQuery(collectedURLS).each(function(index, element){
+
+            if(!visitedURLS.includes(element)){
+                visitedURLS.push(element);
+                console.log(element)
+                chrome.tabs.create({url:element});
+            }
+        });
+    }
+}*/
