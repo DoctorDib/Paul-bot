@@ -83,43 +83,65 @@ var toggleButtons = function(start, stop){
         jQuery('#start').removeClass('active');
     }
 };
+var dataToggle = function(button){
+	console.log(button)
+	if(jQuery('#grab')[0].className === 'active'){
+		jQuery(button).removeClass('active');
+		chrome.runtime.sendMessage({command: 'set', key: 'grabData', val: false}, function(){
+	    });
+	} else {
+		jQuery(button).addClass('active');
+		chrome.runtime.sendMessage({command: 'set', key: 'grabData', val: true}, function(){
+	    });
+	}
+};
 
 jQuery('#start').click(function(){
     toggleButtons(true, false);
 
     // Sending message to background
-    chrome.runtime.sendMessage({command: 'set', val: true}, function(){
+    chrome.runtime.sendMessage({command: 'set', key:'active', val: true}, function(){
     });
 });
-
-
 jQuery('#stop').click(function(){
     toggleButtons(false, true);
 
     // Sending message to background
-    chrome.runtime.sendMessage({command: 'set', val: false}, function(){
+    chrome.runtime.sendMessage({command: 'set', key: 'active', val: false}, function(){
     });
 });
+jQuery('#grab').click(function(){
+	dataToggle(this);
+});
 
-
-//
-chrome.runtime.sendMessage({command: 'check'}, function(response) {
+// Setting up Toggle buttons
+chrome.runtime.sendMessage({command: 'check', key: 'active'}, function(response) {
     if(response.msg){
         toggleButtons(true, false);
     } else {
         toggleButtons(false, true);
     }
 });
+chrome.runtime.sendMessage({command: 'check', key:'grabData'}, function(response){
+	if(response.msg){
+		jQuery('#grab').addClass('active');
+	} else {
+		jQuery('#grab').removeClass('active');
+	}
+});
 
 //===========================================================
 
 // Grabbing url domain and inserting into domain textbox
 jQuery(document).ready(function(){
-    chrome.tabs.getSelected(null,function(tab) {
-        var domain = tab.url;
-        domain = domain.match(/^(http|https):\/\/.*?(?=\/)./gi);
-        jQuery('#url')[0].value = domain;
-    });
+    try {
+        chrome.tabs.getSelected(null,function(tab) {
+            var domain = tab.url;
+            domain = domain.match(/^(http|https):\/\/.*?(?=\/)./gi);
+            jQuery('#url')[0].value = domain;
+        });
+    } catch (e){
+    }
 });
 
 
@@ -137,9 +159,6 @@ jQuery('#createMap').click(function(){
 // Rebuilding on mapping.html
 if(!jQuery('#url').length){
     chrome.runtime.sendMessage({command: 'collectMap'}, function(data){
-        var message = data.msg;
-        console.log(data.msg);
-
         validateObject(jQuery('#url').val(), data.msg, false);
     });
 }

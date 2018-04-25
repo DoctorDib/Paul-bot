@@ -19,7 +19,7 @@ var nest = function(obj, keys, v) {
     return obj;
 };
 
-chrome.runtime.sendMessage({command: 'check'}, function(response) {
+chrome.runtime.sendMessage({command: 'check', key: 'active'}, function(response) {
   	if(response.msg){
   		var collectedURLS = response.collected;
 
@@ -28,26 +28,26 @@ chrome.runtime.sendMessage({command: 'check'}, function(response) {
 		var domain = window.location.origin;
 		console.log(domain);
 		var doc = document.getElementsByTagName('html')[0].innerHTML;
+  
 
 		// regex
 		var reg = domain + '.*?(?=")';
 		var regEX = new RegExp(reg, 'gi');
 
 		var domainMatch = doc.match(regEX);
-
 		var urlMatch = doc.match(/(?<=href=").*?(?=")/gi);
 
 		jQuery(urlMatch).each(function(index, element){
 			if(element.charAt(0) === '/' && !list.includes(domain+element) && !collectedURLS.includes(element)){
 				var url = element.split('/');
-				
+
 				var temp = {};
                 url[0] = domain.split('/').pop();
                 console.log(url);
 				nest(temp, url, true);
-				
+
 				list.push(domain+element);
-				
+
 				jQuery.extend(true, overall, temp);
 			}
 		});
@@ -55,27 +55,26 @@ chrome.runtime.sendMessage({command: 'check'}, function(response) {
 		jQuery(domainMatch).each(function(index, element){
 			if(!list.includes(element) && element !== domain && !collectedURLS.includes(element)){
                 var url = element.split(domain)[1].split('/');
-                
+
                 url[0] = domain.split('/').pop();
-				
-				var temp = {};	
+
+				var temp = {};
 				console.log(url);
 				nest(temp, url, true);
-				
+
 				list.push(element);
-				
+
 				jQuery.extend(true, overall, temp);
 			}
 		});
-		
+
 		// Saving array of urls.
 		chrome.runtime.sendMessage({command: 'saveList', val: list}, function(data){
 			console.log(data);
 		});
-		 
+
         // Saving the mapping of the site
 		if(domain.indexOf('chrome-extension://') === -1){
-			console.log("Hi!");
 			chrome.runtime.sendMessage({command: 'saveMapping', val: {data: overall, domain: domain}}, function(data){
 				console.log("======");
 				console.log(data);
@@ -83,4 +82,19 @@ chrome.runtime.sendMessage({command: 'check'}, function(response) {
 			});
 		}
 	}
+});
+
+
+chrome.runtime.sendMessage({command: 'check', key: 'grabData'}, function(response) {
+    if(response.msg){
+        function injectScript(file, node) {
+            var th = document.getElementsByTagName(node)[0];
+            var s = document.createElement('script');
+            s.setAttribute('type', 'text/javascript');
+            s.setAttribute('src', file);
+            th.appendChild(s);
+        }
+        
+        injectScript( chrome.extension.getURL('public/js/processData.js'), 'body');
+    }
 });
